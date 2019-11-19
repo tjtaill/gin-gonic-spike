@@ -7,6 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type TokenResponse struct {
+	Code   int    `json:"code"`
+	Expire string `json:"expire"`
+	Token  string `json:"token"`
+}
+
 func badPassword(hashedPwd string, plainPwd string) bool {
 	byteHashed := []byte(hashedPwd)
 	bytePlain := []byte(plainPwd)
@@ -17,6 +23,13 @@ func badPassword(hashedPwd string, plainPwd string) bool {
 	return false
 }
 
+// @Summary login
+// @Description login
+// @Tags login
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} routes.TokenResponse
+// @Router /login [post]
 func loginRoutes(router *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) {
 	router.POST("/login", authMiddleware.LoginHandler)
 }

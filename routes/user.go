@@ -19,14 +19,32 @@ func hashAndSalt(pwd string) (string, error) {
 	return string(hash), nil
 }
 
-func userRoutes(router *gin.RouterGroup, db *gorm.DB) {
-	router.GET("/users", func(ctx *gin.Context) {
+// @Summary get a list of users
+// @Description get a list of users
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Success 200 {object} models.User
+// @Router /api/v1/users [get]
+func getuser(db *gorm.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		users := make([]models.User, 0)
 		db.Find(&users)
 		ctx.JSON(http.StatusOK, users)
-	})
+	}
+}
 
-	router.POST("/user", func(ctx *gin.Context) {
+// @Summary get a list of users
+// @Description get a list of users
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Success 200 {object} middleware.Credentials
+// @Router /api/v1/user [post]
+func postuser(db *gorm.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		user := models.User{}
 		err := ctx.BindJSON(&user)
 		if err != nil {
@@ -44,5 +62,10 @@ func userRoutes(router *gin.RouterGroup, db *gorm.DB) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": errs[0].Error()})
 			return
 		}
-	})
+	}
+}
+
+func userRoutes(router *gin.RouterGroup, db *gorm.DB) {
+	router.GET("/users", getuser(db))
+	router.POST("/user", postuser(db))
 }

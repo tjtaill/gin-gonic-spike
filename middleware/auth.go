@@ -12,7 +12,7 @@ import (
 
 const identityKey = "id"
 
-type credentials struct {
+type Credentials struct {
 	Username string `json: "username" binding:"required"`
 	Password string `json: "password" binding:"required"`
 }
@@ -29,7 +29,7 @@ func badPassword(hashedPwd string, plainPwd string) bool {
 
 func login(db *gorm.DB) func(*gin.Context) (interface{}, error) {
 	return func(ctx *gin.Context) (interface{}, error) {
-		var credPayload credentials
+		var credPayload Credentials
 		err := ctx.ShouldBind(&credPayload)
 		if err != nil {
 			return "", jwt.ErrMissingLoginValues
