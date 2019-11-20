@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/appleboy/gin-jwt/v2 v2.6.2
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-playground/validator/v10 v10.0.1
 	github.com/jinzhu/gorm v1.9.11
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14 // indirect
 	github.com/swaggo/gin-swagger v1.2.0

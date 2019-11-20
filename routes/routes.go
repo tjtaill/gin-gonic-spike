@@ -10,15 +10,15 @@ import (
 )
 
 func Register(router *gin.Engine, db *gorm.DB) error {
-	authhMiddleware, err := middleware.Auth(db)
+	authMiddleware, err := middleware.Auth(db)
 	if err != nil {
 		return err
 	}
 	url := ginSwagger.URL("http://localhost:8080/docs/doc.json")
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-	loginRoutes(router, authhMiddleware)
+	loginRoutes(router, authMiddleware)
 	api := router.Group("/api/v1")
-	api.Use(authhMiddleware.MiddlewareFunc())
+	api.Use(authMiddleware.MiddlewareFunc())
 	userRoutes(api, db)
 	return nil
 }

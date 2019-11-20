@@ -13,8 +13,8 @@ import (
 const identityKey = "id"
 
 type Credentials struct {
-	Username string `json: "username" binding:"required"`
-	Password string `json: "password" binding:"required"`
+	Username string `json: "username" binding:"required" validate:"empty=false"`
+	Password string `json: "password" binding:"required validate:"empty=false""`
 }
 
 func badPassword(hashedPwd string, plainPwd string) bool {

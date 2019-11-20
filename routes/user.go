@@ -3,12 +3,16 @@ package routes
 import (
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
+
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/ElementAI/gin-gonic-spike/models"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
+
+var validate = validator.New()
 
 func hashAndSalt(pwd string) (string, error) {
 	bs := []byte(pwd)
@@ -39,7 +43,7 @@ func getuser(db *gorm.DB) gin.HandlerFunc {
 // @Description get a list of users
 // @Tags user
 // @Accept  json
-// @Param credentials body models.User true "user"
+// @Param user body models.User true "user"
 // @Produce  json
 // @Security ApiKeyAuth
 // @Success 200 {object} middleware.Credentials
@@ -52,6 +56,12 @@ func postuser(db *gorm.DB) gin.HandlerFunc {
 			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		err = validate.Struct(user)
+		if err != nil {
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
 		hashedPwd, err := hashAndSalt(user.Password)
 		if err != nil {
 			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
