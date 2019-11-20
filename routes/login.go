@@ -27,6 +27,7 @@ func badPassword(hashedPwd string, plainPwd string) bool {
 // @Description login
 // @Tags login
 // @Accept  json
+// @Param credentials body middleware.Credentials true "credentials"
 // @Produce  json
 // @Success 200 {object} routes.TokenResponse
 // @Router /login [post]

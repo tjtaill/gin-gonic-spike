@@ -25,7 +25,7 @@ func hashAndSalt(pwd string) (string, error) {
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
-// @Success 200 {object} models.User
+// @Success 200 {array} models.User
 // @Router /api/v1/users [get]
 func getuser(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -39,6 +39,7 @@ func getuser(db *gorm.DB) gin.HandlerFunc {
 // @Description get a list of users
 // @Tags user
 // @Accept  json
+// @Param credentials body models.User true "user"
 // @Produce  json
 // @Security ApiKeyAuth
 // @Success 200 {object} middleware.Credentials
@@ -48,18 +49,18 @@ func postuser(db *gorm.DB) gin.HandlerFunc {
 		user := models.User{}
 		err := ctx.BindJSON(&user)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 		hashedPwd, err := hashAndSalt(user.Password)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 		user.Password = hashedPwd
 		errs := db.Create(&user).GetErrors()
 		if len(errs) > 0 {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": errs[0].Error()})
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": errs[0].Error()})
 			return
 		}
 	}
