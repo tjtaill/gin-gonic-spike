@@ -63,7 +63,9 @@ func unauthorized(ctx *gin.Context, code int, message string) {
 
 func identity(ctx *gin.Context) interface{} {
 	claims := jwt.ExtractClaims(ctx)
-	return &models.User{Name: claims[identityKey].(string)}
+	user := &models.User{Name: claims[identityKey].(string)}
+	ctx.Request.SetBasicAuth(user.Name, "")
+	return &models.User{Name: user.Name}
 }
 
 func payload(data interface{}) jwt.MapClaims {

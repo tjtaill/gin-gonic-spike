@@ -10,7 +10,7 @@ import (
 )
 
 func Register(router *gin.Engine, db *gorm.DB) error {
-	authMiddleware, err := middleware.Auth(db)
+	authMiddleware, rbacMiddleware, err := middleware.Create(db)
 	if err != nil {
 		return err
 	}
@@ -19,6 +19,7 @@ func Register(router *gin.Engine, db *gorm.DB) error {
 	loginRoutes(router, authMiddleware)
 	api := router.Group("/api/v1")
 	api.Use(authMiddleware.MiddlewareFunc())
+	api.Use(*rbacMiddleware)
 	userRoutes(api, db)
 	return nil
 }
