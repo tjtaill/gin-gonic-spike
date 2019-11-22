@@ -16,6 +16,11 @@ with the go utility swag https://github.com/swaggo/swag
 
 `swag init` this places the static docs in the docs directory which is served on the /docs/index.html
 
+# TODO
+
+* automation testing https://github.com/gin-gonic/gin#testing
+
+
 # Considerations
 
 * experimenting with hydra https://github.com/ory/hydra and https://github.com/janekolszak/gin-hydra for better oauth security
